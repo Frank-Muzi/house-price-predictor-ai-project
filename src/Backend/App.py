@@ -6,6 +6,7 @@ import pandas as pd
 app = Flask(__name__)
 CORS(app)
 
+
 # --- Load trained pipeline (preprocessing + model) ---
 with open("house_model.pkl", "rb") as f:
     model = pickle.load(f)
