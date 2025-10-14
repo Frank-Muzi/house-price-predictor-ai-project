@@ -71,19 +71,20 @@ export default function HomePredictorForm() {
       </h2>
 
       {/* Numeric inputs */}
-      {["area", "bedrooms", "bathrooms", "floors", "year_built"].map((field) => (
-        <input
-          key={field}
-          type="number"
-          name={field}
-          placeholder={field.replace("_", " ").replace(/\b\w/g, (c) => c.toUpperCase())}
-          value={form[field]}
-          onChange={handleChange}
-          required
-          style={{ height: "48px", fontSize: "1.2rem", padding: "0 16px", borderRadius: "7px" }}
-        />
-      ))}
-
+        {["area", "bedrooms", "bathrooms", "floors", "year_built"].map((field) => (
+          <input
+            key={field}
+            type="number"
+            name={field}
+            min={0}
+            {...(field === "year_built" ? { pattern: "\\d{4}", minLength: 4, maxLength: 4 } : {})}
+            placeholder={field.replace("_", " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+            value={form[field]}
+            onChange={handleChange}
+            required
+            style={{ height: "48px", fontSize: "1.2rem", padding: "0 16px", borderRadius: "7px" }}
+          />
+        ))}
       {/* Location */}
       <select
         name="location"
@@ -93,10 +94,8 @@ export default function HomePredictorForm() {
         style={{ height: "48px", fontSize: "1.2rem", padding: "0 16px", borderRadius: "7px" }}
       >
         <option value="">Location</option>
-        <option value="Urban">Urban</option>
-        <option value="Suburban">Suburban</option>
-        <option value="Downtown">Downtown</option>
-        <option value="Rural">Rural</option>
+        <option value="Urban">Rural</option>
+        <option value="Suburban">Urban</option>
       </select>
 
       {/* Condition */}
@@ -108,9 +107,8 @@ export default function HomePredictorForm() {
         style={{ height: "48px", fontSize: "1.2rem", padding: "0 16px", borderRadius: "7px" }}
       >
         <option value="">Condition</option>
-        <option value="New">New</option>
+        <option value="New">Excellent</option>
         <option value="Good">Good</option>
-        <option value="Needs Renovation">Needs Renovation</option>
       </select>
 
       {/* Garage */}
