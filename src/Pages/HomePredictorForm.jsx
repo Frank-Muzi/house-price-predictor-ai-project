@@ -21,7 +21,7 @@ export default function HomePredictorForm() {
     const currentYear = new Date().getFullYear();
     let value = e.target.value;
 
-    // Allow only 4 numeric digits
+    // Only allow 4 numeric digits
     value = value.replace(/\D/g, "").slice(0, 4);
 
     // Validate year range
@@ -65,6 +65,21 @@ export default function HomePredictorForm() {
     }
   };
 
+  // New function to clear the form
+  const handleClear = () => {
+    setForm({
+      area: "",
+      bedrooms: "",
+      bathrooms: "",
+      floors: "",
+      year_built: "",
+      location: "",
+      condition: "",
+      garage: "",
+    });
+    setPrice(null);
+  };
+
   return (
     <>
       {/* Remove spinner arrows for all number inputs */}
@@ -78,7 +93,7 @@ export default function HomePredictorForm() {
           -moz-appearance: textfield;
         }
         select:invalid {
-          color: #888; /* Placeholder color */
+          color: #888;
         }
       `}</style>
 
@@ -108,7 +123,7 @@ export default function HomePredictorForm() {
           Discover Your Home’s True Value Instantly
         </h2>
 
-        {/* Numeric inputs without spinner */}
+        {/* Numeric inputs */}
         {["area", "bedrooms", "bathrooms", "floors"].map((field) => (
           <input
             key={field}
@@ -121,7 +136,7 @@ export default function HomePredictorForm() {
             value={form[field]}
             onChange={handleChange}
             required
-            onWheel={(e) => e.target.blur()} // disable scroll change
+            onWheel={(e) => e.target.blur()}
             style={{
               height: "48px",
               fontSize: "1.2rem",
@@ -155,7 +170,7 @@ export default function HomePredictorForm() {
           }}
         />
 
-        {/* Location Dropdown */}
+        {/* Dropdowns */}
         <select
           name="location"
           value={form.location}
@@ -176,7 +191,6 @@ export default function HomePredictorForm() {
           <option value="Urban">Urban</option>
         </select>
 
-        {/* Condition Dropdown */}
         <select
           name="condition"
           value={form.condition}
@@ -197,7 +211,6 @@ export default function HomePredictorForm() {
           <option value="Good">Good</option>
         </select>
 
-        {/* Garage Dropdown */}
         <select
           name="garage"
           value={form.garage}
@@ -218,6 +231,27 @@ export default function HomePredictorForm() {
           <option value="No">No</option>
         </select>
 
+        {/* Clear Form Button */}
+        <button
+          type="button"
+          onClick={handleClear}
+          style={{
+            padding: "6px",
+            fontSize: "0.8rem",
+            borderRadius: "7px",
+            border: "none",
+            backgroundColor: "#ccc",
+            color: "white",
+            fontWeight: "bold",
+            cursor: "pointer",
+            marginTop: "8px",
+            alignSelf: "center",
+          }}
+        >
+          Clear Form
+        </button>
+
+        {/* Predict Button */}
         <button
           type="submit"
           style={{
@@ -229,7 +263,7 @@ export default function HomePredictorForm() {
             color: "white",
             fontWeight: "bold",
             cursor: "pointer",
-            marginTop: "16px",
+            marginTop: "8px",
           }}
         >
           Predict
