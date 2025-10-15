@@ -77,6 +77,9 @@ export default function HomePredictorForm() {
         input[type=number] {
           -moz-appearance: textfield;
         }
+        select:invalid {
+          color: #888; /* Placeholder color */
+        }
       `}</style>
 
       <form
@@ -152,7 +155,7 @@ export default function HomePredictorForm() {
           }}
         />
 
-        {/* Location */}
+        {/* Location Dropdown */}
         <select
           name="location"
           value={form.location}
@@ -163,14 +166,17 @@ export default function HomePredictorForm() {
             fontSize: "1.2rem",
             padding: "0 16px",
             borderRadius: "7px",
+            border: "1px solid #ccc",
           }}
         >
-          <option value="">Location</option>
+          <option value="" disabled hidden>
+            Select Location
+          </option>
           <option value="Rural">Rural</option>
           <option value="Urban">Urban</option>
         </select>
 
-        {/* Condition */}
+        {/* Condition Dropdown */}
         <select
           name="condition"
           value={form.condition}
@@ -181,14 +187,17 @@ export default function HomePredictorForm() {
             fontSize: "1.2rem",
             padding: "0 16px",
             borderRadius: "7px",
+            border: "1px solid #ccc",
           }}
         >
-          <option value="">Condition</option>
-          <option value="Excellent">Good</option>
-          <option value="Fair">Excellent</option>
+          <option value="" disabled hidden>
+            Select Condition
+          </option>
+          <option value="Excellent">Excellent</option>
+          <option value="Good">Good</option>
         </select>
 
-        {/* Garage */}
+        {/* Garage Dropdown */}
         <select
           name="garage"
           value={form.garage}
@@ -199,9 +208,12 @@ export default function HomePredictorForm() {
             fontSize: "1.2rem",
             padding: "0 16px",
             borderRadius: "7px",
+            border: "1px solid #ccc",
           }}
         >
-          <option value="">Garage</option>
+          <option value="" disabled hidden>
+            Select Garage Option
+          </option>
           <option value="Yes">Yes</option>
           <option value="No">No</option>
         </select>
