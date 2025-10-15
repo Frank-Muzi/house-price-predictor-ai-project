@@ -207,8 +207,8 @@ export default function HomePredictorForm() {
           <option value="" disabled hidden>
             Select Condition
           </option>
-          <option value="Excellent">Excellent</option>
-          <option value="Good">Good</option>
+          <option value="Excellent">Good</option>
+          <option value="Fair">Excellent</option>
         </select>
 
         <select

@@ -39,5 +39,6 @@ Usage
 
 Deployment
 
-    Deployed on Vercel - recommended easy and fast.
+    Deployed frontednt on Vercel.
+    Deployed the backend on Render-- https://house-price-predictor-ai-project-4.onrender.com.
 
