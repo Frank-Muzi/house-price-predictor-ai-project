@@ -20,11 +20,8 @@ export default function HomePredictorForm() {
   const handleYearBuiltChange = (e) => {
     const currentYear = new Date().getFullYear();
     let value = e.target.value;
-
-    // Only allow 4 numeric digits
     value = value.replace(/\D/g, "").slice(0, 4);
 
-    // Validate year range
     if (value && (Number(value) < 1900 || Number(value) > currentYear)) {
       e.target.setCustomValidity(
         `Please enter a year between 1900 and ${currentYear}`
@@ -39,6 +36,20 @@ export default function HomePredictorForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setPrice(null);
+
+    // Manual validation for min values
+    if (Number(form.area) < 200) {
+      alert("Area must be greater than 200");
+      return;
+    }
+    if (Number(form.bedrooms) < 1) {
+      alert("Bedrooms must be at least 1");
+      return;
+    }
+    if (Number(form.bathrooms) < 1) {
+      alert("Bathrooms must be at least 1");
+      return;
+    }
 
     try {
       const payload = {
@@ -87,12 +98,12 @@ export default function HomePredictorForm() {
   return (
     <>
       <style>{`
-        input[type=number]::-webkit-outer-spin-button,
-        input[type=number]::-webkit-inner-spin-button {
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
           -webkit-appearance: none;
           margin: 0;
         }
-        input[type=number] {
+        input {
           -moz-appearance: textfield;
         }
         select:invalid {
@@ -116,44 +127,26 @@ export default function HomePredictorForm() {
           minHeight: "220px",
         }}
       >
-        <h2
-          style={{
-            textAlign: "center",
-            marginBottom: "18px",
-            fontSize: "2rem",
-          }}
-        >
+        <h2 style={{ textAlign: "center", marginBottom: "18px", fontSize: "2rem" }}>
           Discover Your Home’s True Value Instantly
         </h2>
 
-        {/* Numeric inputs */}
+        {/* Numeric inputs as text for free typing */}
         {["area", "bedrooms", "bathrooms", "floors"].map((field) => (
           <input
             key={field}
-            type="number"
+            type="text"
             name={field}
-            min={
-              field === "area"
-                ? 201
-                : field === "bedrooms" || field === "bathrooms"
-                ? 1
-                : 0
-            }
-            placeholder={field
-              .replace("_", " ")
-              .replace(/\b\w/g, (c) => c.toUpperCase())}
+            placeholder={field.replace("_", " ").replace(/\b\w/g, (c) => c.toUpperCase())}
             value={form[field]}
             onChange={handleChange}
             required
-            onWheel={(e) => e.target.blur()}
             style={{
               height: "48px",
               fontSize: "1.2rem",
               padding: "0 16px",
               borderRadius: "7px",
               border: "1px solid #ccc",
-              appearance: "none",
-              MozAppearance: "textfield",
             }}
           />
         ))}
@@ -167,130 +160,43 @@ export default function HomePredictorForm() {
           onChange={handleYearBuiltChange}
           required
           inputMode="numeric"
-          onWheel={(e) => e.target.blur()}
           style={{
             height: "48px",
             fontSize: "1.2rem",
             padding: "0 16px",
             borderRadius: "7px",
             border: "1px solid #ccc",
-            appearance: "none",
-            MozAppearance: "textfield",
           }}
         />
 
         {/* Dropdowns */}
-        <select
-          name="location"
-          value={form.location}
-          onChange={handleChange}
-          required
-          style={{
-            height: "48px",
-            fontSize: "1.2rem",
-            padding: "0 16px",
-            borderRadius: "7px",
-            border: "1px solid #ccc",
-          }}
-        >
-          <option value="" disabled hidden>
-            Select Location
-          </option>
+        <select name="location" value={form.location} onChange={handleChange} required style={{ height: "48px", fontSize: "1.2rem", padding: "0 16px", borderRadius: "7px", border: "1px solid #ccc" }}>
+          <option value="" disabled hidden>Select Location</option>
           <option value="Rural">Rural</option>
           <option value="Urban">Urban</option>
         </select>
 
-        <select
-          name="condition"
-          value={form.condition}
-          onChange={handleChange}
-          required
-          style={{
-            height: "48px",
-            fontSize: "1.2rem",
-            padding: "0 16px",
-            borderRadius: "7px",
-            border: "1px solid #ccc",
-          }}
-        >
-          <option value="" disabled hidden>
-            Select Condition
-          </option>
+        <select name="condition" value={form.condition} onChange={handleChange} required style={{ height: "48px", fontSize: "1.2rem", padding: "0 16px", borderRadius: "7px", border: "1px solid #ccc" }}>
+          <option value="" disabled hidden>Select Condition</option>
           <option value="Excellent">Good</option>
           <option value="Fair">Excellent</option>
         </select>
 
-        <select
-          name="garage"
-          value={form.garage}
-          onChange={handleChange}
-          required
-          style={{
-            height: "48px",
-            fontSize: "1.2rem",
-            padding: "0 16px",
-            borderRadius: "7px",
-            border: "1px solid #ccc",
-          }}
-        >
-          <option value="" disabled hidden>
-            Select Garage Option
-          </option>
+        <select name="garage" value={form.garage} onChange={handleChange} required style={{ height: "48px", fontSize: "1.2rem", padding: "0 16px", borderRadius: "7px", border: "1px solid #ccc" }}>
+          <option value="" disabled hidden>Select Garage Option</option>
           <option value="Yes">Yes</option>
           <option value="No">No</option>
         </select>
 
         {/* Clear Form Button */}
-        <button
-          type="button"
-          onClick={handleClear}
-          style={{
-            padding: "6px",
-            fontSize: "0.8rem",
-            borderRadius: "7px",
-            border: "none",
-            backgroundColor: "#ccc",
-            color: "white",
-            fontWeight: "bold",
-            cursor: "pointer",
-            marginTop: "8px",
-            alignSelf: "center",
-          }}
-        >
-          Clear Form
-        </button>
+        <button type="button" onClick={handleClear} style={{ padding: "6px", fontSize: "0.8rem", borderRadius: "7px", border: "none", backgroundColor: "#ccc", color: "white", fontWeight: "bold", cursor: "pointer", marginTop: "8px", alignSelf: "center" }}>Clear Form</button>
 
         {/* Predict Button */}
-        <button
-          type="submit"
-          style={{
-            padding: "16px",
-            fontSize: "1.25rem",
-            borderRadius: "7px",
-            border: "none",
-            backgroundColor: "#888888",
-            color: "white",
-            fontWeight: "bold",
-            cursor: "pointer",
-            marginTop: "8px",
-          }}
-        >
-          Predict
-        </button>
+        <button type="submit" style={{ padding: "16px", fontSize: "1.25rem", borderRadius: "7px", border: "none", backgroundColor: "#888888", color: "white", fontWeight: "bold", cursor: "pointer", marginTop: "8px" }}>Predict</button>
 
         {price && (
-          <p
-            style={{
-              marginTop: "20px",
-              fontWeight: "bold",
-              fontSize: "20px",
-              background: "rgba(255,255,255,0.85)",
-              padding: "10px 20px",
-              borderRadius: "8px",
-            }}
-          >
-            Predicted Price: R{" "}
-            {typeof price === "number" ? price.toLocaleString() : price}
+          <p style={{ marginTop: "20px", fontWeight: "bold", fontSize: "20px", background: "rgba(255,255,255,0.85)", padding: "10px 20px", borderRadius: "8px" }}>
+            Predicted Price: R {typeof price === "number" ? price.toLocaleString() : price}
           </p>
         )}
       </form>

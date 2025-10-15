@@ -39,6 +39,6 @@ Usage
 
 Deployment
 
-    Deployed frontednt on Vercel.
+    Deployed frontednt on Vercel - https://house-price-predictor-ai-project.vercel.app/.
     Deployed the backend on Render-- https://house-price-predictor-ai-project-4.onrender.com.
 
