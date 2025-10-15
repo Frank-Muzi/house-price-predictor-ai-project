@@ -14,7 +14,22 @@ export default function HomePredictorForm() {
   const [price, setPrice] = useState(null);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const field = e.target.name;
+    let value = e.target.value;
+
+    // Minimum value restrictions
+    const minValue =
+      field === "area"
+        ? 201
+        : field === "bedrooms" || field === "bathrooms"
+        ? 1
+        : 0;
+
+    if (Number(value) < minValue) {
+      value = "";
+    }
+
+    setForm({ ...form, [field]: value });
   };
 
   const handleYearBuiltChange = (e) => {
@@ -26,7 +41,9 @@ export default function HomePredictorForm() {
 
     // Validate year range
     if (value && (Number(value) < 1900 || Number(value) > currentYear)) {
-      e.target.setCustomValidity(`Please enter a year between 1900 and ${currentYear}`);
+      e.target.setCustomValidity(
+        `Please enter a year between 1900 and ${currentYear}`
+      );
     } else {
       e.target.setCustomValidity("");
     }
@@ -50,11 +67,14 @@ export default function HomePredictorForm() {
         Garage: form.garage,
       };
 
-      const response = await fetch("https://house-price-predictor-ai-project-4.onrender.com/predict", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const response = await fetch(
+        "https://house-price-predictor-ai-project-4.onrender.com/predict",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
 
       if (!response.ok) throw new Error("Prediction failed");
 
@@ -65,7 +85,6 @@ export default function HomePredictorForm() {
     }
   };
 
-  // New function to clear the form
   const handleClear = () => {
     setForm({
       area: "",
@@ -82,7 +101,6 @@ export default function HomePredictorForm() {
 
   return (
     <>
-      {/* Remove spinner arrows for all number inputs */}
       <style>{`
         input[type=number]::-webkit-outer-spin-button,
         input[type=number]::-webkit-inner-spin-button {
@@ -129,7 +147,13 @@ export default function HomePredictorForm() {
             key={field}
             type="number"
             name={field}
-            min={0}
+            min={
+              field === "area"
+                ? 201
+                : field === "bedrooms" || field === "bathrooms"
+                ? 1
+                : 0
+            }
             placeholder={field
               .replace("_", " ")
               .replace(/\b\w/g, (c) => c.toUpperCase())}
@@ -281,9 +305,7 @@ export default function HomePredictorForm() {
             }}
           >
             Predicted Price: R{" "}
-            {typeof price === "number"
-              ? price.toLocaleString()
-              : price}
+            {typeof price === "number" ? price.toLocaleString() : price}
           </p>
         )}
       </form>
