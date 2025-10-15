@@ -39,7 +39,7 @@ export default function HomePredictorForm() {
 
     // Manual validation for min values
     if (Number(form.area) < 200) {
-      alert("Area must be greater than 200");
+      alert("Area must be greater than 200m");
       return;
     }
     if (Number(form.bedrooms) < 1) {
