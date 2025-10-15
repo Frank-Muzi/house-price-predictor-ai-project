@@ -14,22 +14,7 @@ export default function HomePredictorForm() {
   const [price, setPrice] = useState(null);
 
   const handleChange = (e) => {
-    const field = e.target.name;
-    let value = e.target.value;
-
-    // Minimum value restrictions
-    const minValue =
-      field === "area"
-        ? 201
-        : field === "bedrooms" || field === "bathrooms"
-        ? 1
-        : 0;
-
-    if (Number(value) < minValue) {
-      value = "";
-    }
-
-    setForm({ ...form, [field]: value });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleYearBuiltChange = (e) => {
