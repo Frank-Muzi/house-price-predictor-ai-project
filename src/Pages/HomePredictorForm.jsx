@@ -178,8 +178,8 @@ export default function HomePredictorForm() {
 
         <select name="condition" value={form.condition} onChange={handleChange} required style={{ height: "48px", fontSize: "1.2rem", padding: "0 16px", borderRadius: "7px", border: "1px solid #ccc" }}>
           <option value="" disabled hidden>Select Condition</option>
-          <option value="Excellent">Good</option>
-          <option value="Fair">Excellent</option>
+          <option value="Fair">Good</option>
+          <option value="Poor">Excellent</option>
         </select>
 
         <select name="garage" value={form.garage} onChange={handleChange} required style={{ height: "48px", fontSize: "1.2rem", padding: "0 16px", borderRadius: "7px", border: "1px solid #ccc" }}>
