@@ -17,12 +17,28 @@ export default function HomePredictorForm() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleYearBuiltChange = (e) => {
+    const currentYear = new Date().getFullYear();
+    let value = e.target.value;
+
+    // Allow only 4 numeric digits
+    value = value.replace(/\D/g, "").slice(0, 4);
+
+    // Validate year range
+    if (value && (Number(value) < 1900 || Number(value) > currentYear)) {
+      e.target.setCustomValidity(`Please enter a year between 1900 and ${currentYear}`);
+    } else {
+      e.target.setCustomValidity("");
+    }
+
+    setForm({ ...form, year_built: value });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setPrice(null);
 
     try {
-      // Convert numeric inputs to numbers
       const payload = {
         Area: Number(form.area),
         Bedrooms: Number(form.bedrooms),
@@ -50,111 +66,181 @@ export default function HomePredictorForm() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        background: "rgba(255,255,255,0.95)",
-        padding: "30px 40px",
-        borderRadius: "12px",
-        boxShadow: "0 4px 24px rgba(0,0,0,0.10)",
-        display: "flex",
-        flexDirection: "column",
-        gap: "18px",
-        width: "40vw",
-        maxWidth: "600px",
-        minWidth: "320px",
-        minHeight: "220px",
-      }}
-    >
-      <h2 style={{ textAlign: "center", marginBottom: "18px", fontSize: "2rem" }}>
-        Discover Your Home’s True Value Instantly
-      </h2>
+    <>
+      {/* Remove spinner arrows for all number inputs */}
+      <style>{`
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        input[type=number] {
+          -moz-appearance: textfield;
+        }
+      `}</style>
 
-      {/* Numeric inputs */}
-        {["area", "bedrooms", "bathrooms", "floors", "year_built"].map((field) => (
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          background: "rgba(255,255,255,0.95)",
+          padding: "30px 40px",
+          borderRadius: "12px",
+          boxShadow: "0 4px 24px rgba(0,0,0,0.10)",
+          display: "flex",
+          flexDirection: "column",
+          gap: "18px",
+          width: "40vw",
+          maxWidth: "600px",
+          minWidth: "320px",
+          minHeight: "220px",
+        }}
+      >
+        <h2
+          style={{
+            textAlign: "center",
+            marginBottom: "18px",
+            fontSize: "2rem",
+          }}
+        >
+          Discover Your Home’s True Value Instantly
+        </h2>
+
+        {/* Numeric inputs without spinner */}
+        {["area", "bedrooms", "bathrooms", "floors"].map((field) => (
           <input
             key={field}
             type="number"
             name={field}
             min={0}
-            {...(field === "year_built" ? { pattern: "\\d{4}", minLength: 4, maxLength: 4 } : {})}
-            placeholder={field.replace("_", " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+            placeholder={field
+              .replace("_", " ")
+              .replace(/\b\w/g, (c) => c.toUpperCase())}
             value={form[field]}
             onChange={handleChange}
             required
-            style={{ height: "48px", fontSize: "1.2rem", padding: "0 16px", borderRadius: "7px" }}
+            onWheel={(e) => e.target.blur()} // disable scroll change
+            style={{
+              height: "48px",
+              fontSize: "1.2rem",
+              padding: "0 16px",
+              borderRadius: "7px",
+              border: "1px solid #ccc",
+              appearance: "none",
+              MozAppearance: "textfield",
+            }}
           />
         ))}
-      {/* Location */}
-      <select
-        name="location"
-        value={form.location}
-        onChange={handleChange}
-        required
-        style={{ height: "48px", fontSize: "1.2rem", padding: "0 16px", borderRadius: "7px" }}
-      >
-        <option value="">Location</option>
-        <option value="Urban">Rural</option>
-        <option value="Suburban">Urban</option>
-      </select>
 
-      {/* Condition */}
-      <select
-        name="condition"
-        value={form.condition}
-        onChange={handleChange}
-        required
-        style={{ height: "48px", fontSize: "1.2rem", padding: "0 16px", borderRadius: "7px" }}
-      >
-        <option value="">Condition</option>
-        <option value="New">Excellent</option>
-        <option value="Good">Good</option>
-      </select>
-
-      {/* Garage */}
-      <select
-        name="garage"
-        value={form.garage}
-        onChange={handleChange}
-        required
-        style={{ height: "48px", fontSize: "1.2rem", padding: "0 16px", borderRadius: "7px" }}
-      >
-        <option value="">Garage</option>
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
-      </select>
-
-      <button
-        type="submit"
-        style={{
-          padding: "16px",
-          fontSize: "1.25rem",
-          borderRadius: "7px",
-          border: "none",
-          backgroundColor: "#888888",
-          color: "white",
-          fontWeight: "bold",
-          cursor: "pointer",
-          marginTop: "16px",
-        }}
-      >
-        Predict
-      </button>
-
-      {price && (
-        <p
+        {/* Year Built */}
+        <input
+          type="text"
+          name="year_built"
+          placeholder="Year Built"
+          value={form.year_built}
+          onChange={handleYearBuiltChange}
+          required
+          inputMode="numeric"
+          onWheel={(e) => e.target.blur()}
           style={{
-            marginTop: "20px",
-            fontWeight: "bold",
-            fontSize: "20px",
-            background: "rgba(255,255,255,0.85)",
-            padding: "10px 20px",
-            borderRadius: "8px",
+            height: "48px",
+            fontSize: "1.2rem",
+            padding: "0 16px",
+            borderRadius: "7px",
+            border: "1px solid #ccc",
+            appearance: "none",
+            MozAppearance: "textfield",
+          }}
+        />
+
+        {/* Location */}
+        <select
+          name="location"
+          value={form.location}
+          onChange={handleChange}
+          required
+          style={{
+            height: "48px",
+            fontSize: "1.2rem",
+            padding: "0 16px",
+            borderRadius: "7px",
           }}
         >
-          Predicted Price: R {typeof price === "number" ? price.toLocaleString() : price}
-        </p>
-      )}
-    </form>
+          <option value="">Location</option>
+          <option value="Rural">Rural</option>
+          <option value="Urban">Urban</option>
+        </select>
+
+        {/* Condition */}
+        <select
+          name="condition"
+          value={form.condition}
+          onChange={handleChange}
+          required
+          style={{
+            height: "48px",
+            fontSize: "1.2rem",
+            padding: "0 16px",
+            borderRadius: "7px",
+          }}
+        >
+          <option value="">Condition</option>
+          <option value="Excellent">Good</option>
+          <option value="Fair">Excellent</option>
+        </select>
+
+        {/* Garage */}
+        <select
+          name="garage"
+          value={form.garage}
+          onChange={handleChange}
+          required
+          style={{
+            height: "48px",
+            fontSize: "1.2rem",
+            padding: "0 16px",
+            borderRadius: "7px",
+          }}
+        >
+          <option value="">Garage</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+
+        <button
+          type="submit"
+          style={{
+            padding: "16px",
+            fontSize: "1.25rem",
+            borderRadius: "7px",
+            border: "none",
+            backgroundColor: "#888888",
+            color: "white",
+            fontWeight: "bold",
+            cursor: "pointer",
+            marginTop: "16px",
+          }}
+        >
+          Predict
+        </button>
+
+        {price && (
+          <p
+            style={{
+              marginTop: "20px",
+              fontWeight: "bold",
+              fontSize: "20px",
+              background: "rgba(255,255,255,0.85)",
+              padding: "10px 20px",
+              borderRadius: "8px",
+            }}
+          >
+            Predicted Price: R{" "}
+            {typeof price === "number"
+              ? price.toLocaleString()
+              : price}
+          </p>
+        )}
+      </form>
+    </>
   );
 }
